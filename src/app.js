@@ -1,7 +1,9 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { sessionManager } = require('./SessionManager.js');
 
 const client = new Client({
+    authStrategy: new LocalAuth(),
     puppeteer: {
         headless: false
     }
@@ -16,9 +18,9 @@ client.on('ready', () =>{
 });
 
 client.on('message', (msg) =>{
-    if ( msg.body == '!ping' ) {
-        msg.reply('pong');
-    }
+    sessionManager(msg);
 });
+
+
 
 client.initialize();
