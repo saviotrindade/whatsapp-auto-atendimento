@@ -1,3 +1,7 @@
+const { Messages } = require('./Messages.js');
+const { StepManager } = require('./StepManager.js');
+
+
 const sessions = {};
 
 async function sessionManager(msg) {
@@ -7,41 +11,35 @@ async function sessionManager(msg) {
     // console.log('Session: ' + JSON.stringify(session) + '\n' + 'Session ID: ' + JSON.stringify(sessionID))
 
     if (!sessions[sessionID]) { 
-        msg.reply(welcome());
+        msg.reply(Messages.welcome());
         setNewSession(session, sessionID);
         sessions[sessionID].timeout = selfDestruct(sessionID);
         return
     }
 
-    msg.reply("Você já está sendo atendido... aguarde!")
+    // const sessionStep = sessions[sessionID].step;
 
+    if (!sessions[sessionID].step) {
+        sessions[sessionID].step = StepManager(session, msg.body);
+        sessions[sessionID].timeout = selfDestruct(sessionID);
+        return
+    }
+
+    sessions[sessionID].step.execute(session, msg.body)? selfDestruct(sessionID, 0) : selfDestruct(sessionID);
 }
 
 function setNewSession(session, sessionID) {
     sessions[sessionID] = { 
         session,
+        step: null,
         timeout: null
     };
 }
 
-function selfDestruct(sessionID) {
+function selfDestruct(sessionID, time = 60000) {
     setTimeout(() => {
         delete sessions[sessionID]
-    }, 60000)
-}
-
-function welcome() {
-    return `
-    Olá, meu nome é BOT e eu irei atende-lo!
-            
-    Para começar, diga o que você esta procurando.
-    As opções são:
-    
-    0 - Fazer um pedido.
-    1 - Ver o status de um pedido.
-    2 - Solicitar o cancelamento de um pedido.
-    3 - Falar com um atendente.
-    `
+    }, time)
 }
 
 module.exports = { sessionManager }
