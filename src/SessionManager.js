@@ -1,5 +1,5 @@
 const { Messages } = require('./Messages.js');
-const { StepManager } = require('./StepManager.js');
+const { StepManager } = require('./StepManager');
 
 
 const sessions = {};
@@ -7,6 +7,8 @@ const sessions = {};
 async function sessionManager(msg) {
     const session = await msg.getChat();
     const sessionID = session.id.user;
+
+    
 
     // console.log('Session: ' + JSON.stringify(session) + '\n' + 'Session ID: ' + JSON.stringify(sessionID))
 
