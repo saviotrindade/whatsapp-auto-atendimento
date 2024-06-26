@@ -23,10 +23,12 @@ client.on('message_create', (msg) => {
     if (msg.body === "init") {
         return sessionManager(msg);
     }
+
+    return;
 })
 
 client.on('message', (msg) =>{
-    if (msg.timestamp < appInitializedAt) return
+    if (msg.timestamp < appInitializedAt) return;
 
     if (!msg.fromMe) {
         return sessionManager(msg);

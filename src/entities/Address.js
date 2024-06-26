@@ -23,3 +23,5 @@ class Address {
         return this.#order;
     }
 }
+
+module.exports = { Address };

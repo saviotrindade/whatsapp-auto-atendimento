@@ -1,5 +1,6 @@
 const { Messages } = require('./Messages.js');
 const { StepManager } = require('./StepManager');
+const { User } = require('./entities/User.js');
 
 
 const sessions = {};
@@ -8,40 +9,47 @@ async function sessionManager(msg) {
     const session = await msg.getChat();
     const sessionID = session.id.user;
 
-    
-
-    // console.log('Session: ' + JSON.stringify(session) + '\n' + 'Session ID: ' + JSON.stringify(sessionID))
-
     if (!sessions[sessionID]) { 
         msg.reply(Messages.welcome());
-        setNewSession(session, sessionID);
+        setNewSession(sessionID);
         sessions[sessionID].timeout = selfDestruct(sessionID);
         return
     }
-
-    // const sessionStep = sessions[sessionID].step;
 
     if (!sessions[sessionID].step) {
-        sessions[sessionID].step = StepManager(session, msg.body);
+        const user = new User(sessionID, session);
+
+        sessions[sessionID].step = StepManager(msg.body, user);
         sessions[sessionID].timeout = selfDestruct(sessionID);
         return
     }
 
-    sessions[sessionID].step.execute(session, msg.body)? selfDestruct(sessionID, 0) : selfDestruct(sessionID);
+    const shouldExecuteNextStep = sessions[sessionID].step.execute(msg.body);
+
+    if (!shouldExecuteNextStep) return;
+
+    const nextStep = sessions[sessionID].step.getNextStep();
+
+    if (!nextStep) throw new Error("Failed to initiate the next step.")
+
+    sessions[sessionID].step = nextStep
 }
 
-function setNewSession(session, sessionID) {
-    sessions[sessionID] = { 
-        session,
+function setNewSession(sessionID) {
+    sessions[sessionID] = {
         step: null,
         timeout: null
     };
 }
 
-function selfDestruct(sessionID, time = 60000) {
+function closeSession(sessionID) {
+    delete sessions[sessionID];
+}
+
+function selfDestruct(sessionID, timeout = 60000) {
     setTimeout(() => {
-        delete sessions[sessionID]
-    }, time)
+        delete sessions[sessionID];
+    }, timeout)
 }
 
 module.exports = { sessionManager }

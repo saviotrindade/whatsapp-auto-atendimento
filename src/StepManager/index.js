@@ -1,11 +1,12 @@
-const { Messages } = require("../Messages.js")
+const { Messages } = require("../Messages.js");
+const { InitiateOrder } = require("./Steps/InitiateOrder.js");
 
 
-function StepManager(chat, message) {
+function StepManager(message, user) {
     switch (message) {
         case "0":
-            const newStep = new Step0();
-            chat.sendMessage(newStep.getStepMessage());
+            const newStep = new InitiateOrder(user);
+            newStep.getStepMessage();
             return newStep;
     
         case "1": 

@@ -1,0 +1,49 @@
+[
+    {
+        "category": "PIZZA",
+        "menu": [
+            {
+                "id": "01",
+                "name": "A MODA",
+                "ingredients": "Calabresa, Tomate, Pimenta Calabresa e Cebola.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "02",
+                "name": "AMERICANA",
+                "ingredients": "Mussarela, Bacon, Ovos, Cebola e Azeitonas.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "03",
+                "name": "ATUM",
+                "ingredients": "Mussarela e Atum.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "04",
+                "name": "BACON",
+                "ingredients": "Mussarela e Bacon.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "05",
+                "name": "BAIANA",
+                "ingredients": "Mussarela, Calabresa, Milho e Pimenta.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "06",
+                "name": "BRASILIENSE",
+                "ingredients": "Mussarela, Presunto, Cebola, Ovos e Pimentão.",
+                "sizes": ["P", "M", "G"]
+            },
+            {
+                "id": "07",
+                "name": "CAIPIRA",
+                "ingredients": "Mussarela, Frango, Ovos e Milho.",
+                "sizes": ["P", "M", "G"]
+            }
+        ]
+    }
+]
