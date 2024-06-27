@@ -26,6 +26,14 @@ class Messages {
     static deliveryRequest() {
         return "Para concluir seu pedido, precisamos saber o local de entrega. 📍\n\nPor favor, informe o endereço completo onde deseja receber o seu pedido, incluindo rua, número, bairro e ponto de referência."
     }
+
+    static addressRequest() {
+        return "Para processar seu pedido com precisão, solicitamos que você forneça todas as informações de entrega em uma única mensagem. 🏡\n\nPor favor, inclua as seguintes informações:\n\n- Nome da rua\n- Número da casa\n- Cor da casa\n- Ponto de referência (algo que nos ajude a localizar sua residência mais facilmente)\n\nAgradecemos sua colaboração! Estamos prontos para prosseguir com o seu pedido assim que recebermos seus dados. 😊"
+    }
+
+    static addressError() {
+        return "Desculpe, parece que houve um erro ao processar as informações do endereço fornecido. 🚫\n\nPor favor, verifique se todos os detalhes estão corretos e tente novamente. Se o problema persistir, entre em contato com nosso suporte para obter assistência."
+    }
 }
 
 module.exports = { Messages };

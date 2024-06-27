@@ -8,22 +8,22 @@ function productService(orderList) {
 
     const productList = [];
 
-    productList.push(orderList.forEach((orderItem)  => {
+    if (!Array.isArray(orderList)) throw new Error("Invalid orderList type: orderList must be an array");
+    orderList.forEach((orderItem)  => {
         data.forEach((item) => {
             if (!item["category"] === orderList.category) return;
 
-            const product = item["menu"].find((menu) => {
+            item["menu"].find((menu) => {
                 if (menu["name"] === orderItem.name) {
-                    return buildProduct(orderItem.category, orderItem.name, orderItem.size, orderItem.quantity, menu["ingredients"]);
+                    const product = buildProduct(orderItem.category, orderItem.id, orderItem.name, orderItem.size, orderItem.quantity, menu["ingredients"]);
+                    return productList.push(product);
                 }
             })
-            console.log(product)
-            if (!product) throw new Error("Product not found.");
 
-            return product
         })
-    }))
+    })
 
+    return productList;
 }
 
 function readFile() {
@@ -44,11 +44,11 @@ function readFile() {
     return JSON.parse(data);
 }
 
-function buildProduct(category, name, size, quantity, ingredients) {
+function buildProduct(category, id, name, size, quantity, ingredients) {
     switch (category) {
         case "PIZZA":
-            return new Pizza(name, size, quantity, ingredients)
-    
+            return new Pizza(id, name, size, quantity, ingredients);
+
         default:
             throw new Error("It is not possible to build this item.");
     }

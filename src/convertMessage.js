@@ -1,23 +1,26 @@
-const { User } = require('./entities/User.js');
-const { Order } = require('./entities/Order.js');
 const { Address } = require('./entities/Address.js');
-const { productService } = require('./products/productService.js');
+const { productService } = require('./services/productService.js');
 
 
-// message : "ITEM 01: PIZZA\n- ID: 01\n- NOME: A MODA\n- TAMANHO: G\n- QUANTIDADE: 01"
+// userMessage : "ITEM 01: PIZZA\n- ID: 01\n- NOME: A MODA\n- TAMANHO: G\n- QUANTIDADE: 01"
+
+// ITEM 01: PIZZA
+// - ID: 01
+// - NOME: A MODA
+// - TAMANHO: G
+// - QUANTIDADE: 01
 
 function convertMessageToPurchase(message) {
     const itemList = [];
-    const orderItems = [];
 
-    if (userMessage.includes("\n\n")) {
-        userMessage.replaceAll("- ", "").split("\n\n").map((item) => {
+    if (message.includes("\n\n")) {
+        message.replaceAll("- ", "").split("\n\n").map((item) => {
             return item.split("\n");
         }).map((item) => {
             return itemList.push(buildProductObject(item));
         })
     } else {
-        itemList.push(buildProductObject(userMessage.replaceAll("- ", "").split("\n")));
+        itemList.push(buildProductObject(message.replaceAll("- ", "").split("\n")));
     }
 
     itemList.forEach((item) => {
@@ -26,11 +29,7 @@ function convertMessageToPurchase(message) {
         }
     })
 
-    itemList.forEach((item) => {
-        orderItems.push(productService(item));
-    })
-
-    return orderItems;
+    return productService(itemList);
 }
 
 function buildProductObject(item) {
@@ -43,7 +42,7 @@ function buildProductObject(item) {
                 id: item[1].split(": ")[1],
                 name: item[2].split(": ")[1],
                 size: item[3].split(": ")[1],
-                quantity: item[4].split(": ")[1]
+                quantity: item[4].split(": ")[1],
             }
         }
         

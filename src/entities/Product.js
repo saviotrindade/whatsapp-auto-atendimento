@@ -3,7 +3,7 @@ const { ProductSize } = require('./enums/ProductSize.js');
 class Product {
     #id
     #name;
-    #price;
+    _price;
     constructor(id, name) {
         if (this.constructor === Product) {
             throw new Error("Abstract classes can't be instantiated.");
@@ -21,11 +21,11 @@ class Product {
     }
 
     getPrice() {
-        return this.#price;
+        return this._price;
     }
 
     setPrice(price) {
-        this.#price = price;
+        this._price = price;
     }
 }
 
@@ -35,18 +35,31 @@ class Pizza extends Product {
     #ingredients;
 
     constructor(id, name, size, quantity, ingredients) {
-        if (!(size === ProductSize.SMALL || size === ProductSize.MEDIUM || size === ProductSize.LARGE)) {
-            throw new Error("The selected size is not available.");
-        }
-
         super(id, name);
-        this.#size = size;
+        this.#size = this.setSize(size);
+        this._price = this.setPrice();
         this.#quantity = quantity;
         this.#ingredients = ingredients;
     }
     
     getSize() {
         return this.#size;
+    }
+
+    setSize(size) {
+        switch (size) {
+            case "P":
+                return ProductSize.SMALL;
+
+            case "M":
+                return ProductSize.MEDIUM;
+
+            case "G":
+                return ProductSize.LARGE;
+
+            default:
+                throw new Error("The selected size is not available.")
+        }
     }
 
     getQuantity() {
@@ -57,25 +70,24 @@ class Pizza extends Product {
         return this.#ingredients;
     }
 
-    productPrice() {
-        const price = () => {
-
-            switch (this.#size) {
-                case ProductSize.SMALL:
-                    return 31.00;
+    setPrice() {
+        switch (this.#size) {
+            case ProductSize.SMALL:
+                return 31.00;
+            
+            case ProductSize.MEDIUM:
+                return 39.00;
                 
-                case ProductSize.MEDIUM:
-                    return 39.00;
-                    
-                case ProductSize.LARGE:
-                    return 48.00;
-                    
-                default:
-                    throw new Error("Price not found.");
-            }
+            case ProductSize.LARGE:
+                return 48.00;
+                
+            default:
+                throw new Error("Price not found.");
         }
+    }
 
-        this.setPrice(price());
+    toString() {
+        return `Pizza: sabor ${this.getName()}, tamanho ${this.getSize()}, preço: ${this.getPrice()}, ingredientes: ${this.getIngredients()}`
     }
 }
 

@@ -1,13 +1,13 @@
 const { Messages } = require("../Messages.js");
-const { InitiateOrder } = require("./Steps/InitiateOrder.js");
+const { PurchaseStep } = require("./Steps/PurchaseStep.js");
 
 
 function StepManager(message, user) {
     switch (message) {
         case "0":
-            const newStep = new InitiateOrder(user);
-            newStep.getStepMessage();
-            return newStep;
+            const step = new PurchaseStep(user);
+            step.getInitialMessage();
+            return step;
     
         case "1": 
             return `

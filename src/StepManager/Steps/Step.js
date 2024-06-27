@@ -1,21 +1,23 @@
 class Step {
-    #status;
+    #stepID;
     #detail;
     #user;
     #nextStep;
+    #isStepCompleted;
 
-    constructor(status, detail, user, nextStep = null) {
+    constructor(stepID, detail, user, nextStep = null) {
         if (this.constructor === Step) {
             throw new Error("Abstract classes can't be instantiated.");
         }
-        this.#user = user;
-        this.#status = status;
+        this.#stepID = stepID;
         this.#detail = detail;
+        this.#user = user;
         this.#nextStep = nextStep;
+        this.#isStepCompleted = false;
     }
 
-    getStatus() {
-        return this.#status;
+    getStepID() {
+        return this.#stepID;
     }
 
     getDetail() {
@@ -30,12 +32,26 @@ class Step {
         return this.#nextStep;
     }
 
+    setNextStep(nextStep) {
+        if (!nextStep) throw new Error("nextStep must be not null.")
+
+        this.#nextStep = nextStep
+    }
+
     execute() {
         throw new Error("Method 'execute()' must be implemented.");
     }
 
-    getStepMessage() {
+    getInitialMessage() {
         throw new Error("Method 'getStepMessage()' must be implemented.");
+    }
+
+    getIsStepCompleted() {
+        return this.#isStepCompleted;
+    }
+
+    setIsStepCompleted(isCompleted) {
+        this.#isStepCompleted = isCompleted;
     }
 }
 

@@ -25,14 +25,24 @@ async function sessionManager(msg) {
     }
 
     const shouldExecuteNextStep = sessions[sessionID].step.execute(msg.body);
+    sessions[sessionID].timeout = selfDestruct(sessionID);
 
-    if (!shouldExecuteNextStep) return;
+    const isStepCompleted = sessions[sessionID].step.getIsStepCompleted();
+    
+    if (!shouldExecuteNextStep) {
+        if (isStepCompleted) {
+            closeSession(sessionID);
+            return;
+        }
+        return;
+    }
 
     const nextStep = sessions[sessionID].step.getNextStep();
-
-    if (!nextStep) throw new Error("Failed to initiate the next step.")
+    if (!nextStep) throw new Error("Failed to initiate the next step.");
 
     sessions[sessionID].step = nextStep
+
+    sessions[sessionID].step.getInitialMessage();
 }
 
 function setNewSession(sessionID) {
@@ -46,7 +56,7 @@ function closeSession(sessionID) {
     delete sessions[sessionID];
 }
 
-function selfDestruct(sessionID, timeout = 60000) {
+function selfDestruct(sessionID, timeout = 900000) {
     setTimeout(() => {
         delete sessions[sessionID];
     }, timeout)

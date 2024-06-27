@@ -1,26 +1,16 @@
 class Address {
-    #id
-    #street
-    #landmark
-    #order
+    #details;
 
-    constructor(street, landmark, order) {
-        this.#id;
-        this.#street = street;
-        this.#landmark = landmark;
-        this.#order = order;
+    constructor(details) {
+        this.#details = details;
     }
 
-    getStreet() {
-        return this.#street;
+    getDetails() {
+        return this.#details;
     }
 
-    getLandmark() {
-        return this.#landmark;
-    }
-    
-    getOrder() {
-        return this.#order;
+    toString() {
+        return `${this.#details}`;
     }
 }
 
