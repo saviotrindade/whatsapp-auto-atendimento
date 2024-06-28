@@ -35,6 +35,10 @@ class Order {
     getUser() {
         return this.#user;
     }
+
+    toString() {
+        return "Aqui estão os detalhes do seu pedido:\n\nID do Produto:" + this.getID() + "\nStatus: " + this.getStatus() + "\n\nAgradecemos sua paciência. Caso precise de mais informações, estamos à disposição!"
+    }
 }
 
 module.exports = { Order };

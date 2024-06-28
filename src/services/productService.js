@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const { Pizza } = require('../entities/Product.js')
+const fs = require("fs");
+const path = require("path");
+const { Purchase } = require("../entities/Purchase.js");
+const { Pizza } = require("../entities/Product.js");
 
 
 function productService(orderList) {
@@ -15,7 +16,7 @@ function productService(orderList) {
 
             item["menu"].find((menu) => {
                 if (menu["name"] === orderItem.name) {
-                    const product = buildProduct(orderItem.category, orderItem.id, orderItem.name, orderItem.size, orderItem.quantity, menu["ingredients"]);
+                    const product = buildProduct(orderItem.category, orderItem.id, orderItem.name, orderItem.size, parseInt(orderItem.quantity), menu["ingredients"]);
                     return productList.push(product);
                 }
             })
@@ -23,7 +24,7 @@ function productService(orderList) {
         })
     })
 
-    return productList;
+    return new Purchase(productList);
 }
 
 function readFile() {
@@ -47,7 +48,7 @@ function readFile() {
 function buildProduct(category, id, name, size, quantity, ingredients) {
     switch (category) {
         case "PIZZA":
-            return new Pizza(id, name, size, quantity, ingredients);
+            return new Pizza(id, name, size, category, quantity, ingredients);
 
         default:
             throw new Error("It is not possible to build this item.");

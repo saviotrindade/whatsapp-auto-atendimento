@@ -7,12 +7,20 @@ class Messages {
         return "Desculpe, não reconheci essa opção. 🤔 Por favor, escolha uma das opções listadas abaixo:\n\n- Para fazer um pedido, digite \`0\`.\n- Para verificar o status de um pedido, digite \`1\`.\n- Para cancelar um pedido, digite \`2\`.\n- Para falar com um de nossos atendentes, digite \`3\`.\n\nSe precisar de mais ajuda, estou aqui para ajudar! 😊"
     }
 
+    static invalidRequest() {
+        return "Desculpe, não entendi sua solicitação. 😕\n\nPor favor, verifique as informações e tente novamente."
+    }
+
     static orderRequest() {
         return "Ótimo! Por favor, informe os detalhes do seu pedido agora. 📝\n\nDigite o nome do produto, a quantidade desejada e qualquer outra informação relevante para que possamos processar seu pedido. 😊"
     }
     
-    static orderSuccess() {
-        return "\`\`\`🎉 Parabéns! Seu pedido foi efetuado com sucesso! 🎉\`\`\`\n\nAgradecemos por escolher nossa loja. Seu pedido está sendo processado e você receberá atualizações sobre o status em breve.\n\nCaso precise de mais alguma coisa, não hesite em nos contatar. Estamos sempre aqui para ajudar! 😊"
+    static orderSuccess(orderID) {
+        return "Seu pedido foi concluído com sucesso! 🎉\n\nNúmero do pedido: " + orderID + "\n\nObrigado por comprar conosco! Seu pedido está sendo processado e você receberá atualizações sobre o status em breve.\nCaso precise de mais alguma coisa, não hesite em nos contatar. 😊"
+    }
+
+    static orderDeclined() {
+        return "Entendido, seu pedido foi cancelado. Se desejar, você pode refazê-lo a qualquer momento."
     }
     
     static orderError() {

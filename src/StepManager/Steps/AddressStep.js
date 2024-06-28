@@ -1,6 +1,8 @@
 const { Step } = require("./Step.js");
 const { Messages } = require("../../Messages.js");
 const { Address } = require("../../entities/Address.js");
+const { Purchase } = require("../../entities/Purchase.js");
+const { OrderStep } = require("./OrderStep.js");
 
 
 class AddressStep extends Step {
@@ -8,10 +10,10 @@ class AddressStep extends Step {
     #address;
 
     constructor(user, purchase) {
-        super(0.1, "Handling user address.", user)
+        if (!purchase instanceof Purchase) throw new Error("Purchase is not instance of Purchase.");
+        super("0.1", "Handling user address", user)
 
         this.#purchase = purchase;
-        this.#address = null;
     }
 
     getPurchase() {
@@ -35,10 +37,12 @@ class AddressStep extends Step {
             const address = new Address(message);
             this.setAddress(address);
 
-            this.setIsStepCompleted(true);
-            return false;
+            const nextStep = new OrderStep(this.getUser(), this.#purchase, this.#address);
+            this.setNextStep(nextStep);
+
+            return true;
         } catch(err) {
-            console.log("Failed:\n" + err);
+            console.log("Failed in AddressStep:\n" + err);
             this.getUser().newMessage(Messages.addressError());
 
             return false;
@@ -46,12 +50,8 @@ class AddressStep extends Step {
 
     }
 
-    getInitialMessage() {
+    initialMessage() {
         this.getUser().newMessage(Messages.addressRequest());
-    }
-
-    getEndMessage() {
-
     }
 
     toString() {
@@ -59,4 +59,4 @@ class AddressStep extends Step {
     }
 }
 
-module.exports = { AddressStep }
+module.exports = { AddressStep };

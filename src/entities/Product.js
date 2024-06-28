@@ -103,14 +103,14 @@ class Pizza extends Product {
                     return 39.00;
                     
                 case ProductSize.LARGE:
-                    return 48.00;
+                    return 48.10;
                     
                 default:
                     throw new Error("Price not found.");
             }
         }
 
-        this.setUnitPrice(price().toFixed(2));
+        this.setUnitPrice(parseFloat(price().toFixed(2)));
     }
 
     calculateTotalPrice() {
@@ -120,11 +120,11 @@ class Pizza extends Product {
             return this.getUnitPrice() * this.getQuantity();
         }
 
-        this.setTotalPrice(price().toFixed(2))
+        this.setTotalPrice(parseFloat(price().toFixed(2)))
     }
 
     toString() {
-        return `Pizza: ${this.getName()}, ${this.getSize()}, ${this.getQuantity()}uni, ${parseFloat(this.getTotalPrice()).toLocaleString('pt-BR', {
+        return `Pizza: ${this.getName()}, ${this.getSize()}, ${this.getQuantity()}uni, ${this.getTotalPrice().toLocaleString('pt-BR', {
             currency: 'BRL',
             style: 'currency',
             minimumFractionDigits: 2

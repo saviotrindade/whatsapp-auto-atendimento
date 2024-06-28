@@ -1,4 +1,3 @@
-const { Address } = require('./entities/Address.js');
 const { productService } = require('./services/productService.js');
 
 

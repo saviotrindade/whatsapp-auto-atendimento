@@ -33,16 +33,17 @@ class Step {
     }
 
     setNextStep(nextStep) {
-        if (!nextStep) throw new Error("nextStep must be not null.")
+        if (!nextStep) throw new Error("nextStep must be not null.");
+        if (!nextStep instanceof Step) throw new Error("Invalid nexStep type: nextStep must be an instance of Step.")
 
-        this.#nextStep = nextStep
+        this.#nextStep = nextStep;
     }
 
     execute() {
         throw new Error("Method 'execute()' must be implemented.");
     }
 
-    getInitialMessage() {
+    initialMessage() {
         throw new Error("Method 'getStepMessage()' must be implemented.");
     }
 

@@ -17,8 +17,9 @@ function makeOrder(user, address, purchase) {
 
     try {
         const order = new Order(generateOrderId(), user, address, purchase)
-        // Solicitar confirmação do pedido com o cliente....
         orders.push(order)
+
+        return order.getID();
     }  catch(err) {
         console.log(err)
     }

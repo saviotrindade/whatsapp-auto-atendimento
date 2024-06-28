@@ -42,7 +42,8 @@ async function sessionManager(msg) {
 
     sessions[sessionID].step = nextStep
 
-    sessions[sessionID].step.getInitialMessage();
+    console.log("Chegou até o inital Message!")
+    sessions[sessionID].step.initialMessage();
 }
 
 function setNewSession(sessionID) {

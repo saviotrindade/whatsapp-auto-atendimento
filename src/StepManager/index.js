@@ -6,7 +6,7 @@ function StepManager(message, user) {
     switch (message) {
         case "0":
             const step = new PurchaseStep(user);
-            step.getInitialMessage();
+            step.initialMessage();
             return step;
     
         case "1": 
@@ -25,7 +25,7 @@ function StepManager(message, user) {
             `;
 
         default:
-            chat.sendMessage(Messages.notFound());
+            user.newMessage(Messages.notFound());
             return null;
     }
 }

@@ -2,8 +2,8 @@ const { Product } = require('./Product.js')
 
 
 class Purchase {
-    #items
-    #totalAmount
+    #items;
+    #totalPrice;
 
     constructor(items) {
         if (Array.isArray(items)) {
@@ -17,28 +17,33 @@ class Purchase {
         }
 
         this.#items = items;
-        this.#totalAmount = this.sumItemsPrice();
+        this.#totalPrice = this.sumItemsPrice();
     }
 
     getItems() {
         return this.#items;
     }
 
-    getTotalAmount() {
-        return this.#totalAmount;
+    getTotalPrice() {
+        return this.#totalPrice;
     }
 
     sumItemsPrice() {
-        const sum = 0.0;
+        const initialValue = 0;
 
-        this.#items.forEach((item) => {
-            try {
-                return sum += parseFloat(item.getPrice());
-            } catch(e) {
-                throw new Error("Unable to convert the data to a float value.")
-            }
-        })
-        return sum;
+        const sum = this.#items.reduce((acc, cur) => {
+            return acc + cur.getTotalPrice()
+        }, initialValue)
+
+        return parseFloat(sum);
+    }
+
+    toString() {
+        return "Valor total: " + this.getTotalPrice().toLocaleString('pt-BR', {
+            currency: 'BRL',
+            style: 'currency',
+            minimumFractionDigits: 2
+          });
     }
 }
 

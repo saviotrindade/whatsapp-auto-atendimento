@@ -1,6 +1,6 @@
 const { Step } = require("./Step.js");
 const { Messages } = require("../../Messages.js");
-const { Product } = require("../../entities/Product.js");
+const { Purchase } = require("../../entities/Purchase.js");
 const { AddressStep } = require("./AddressStep.js")
 const { convertMessageToPurchase } = require("../../convertMessage.js")
 
@@ -9,7 +9,7 @@ class PurchaseStep extends Step {
     #purchase
 
     constructor(user) {
-        super(0, "Handling customer order details.", user);
+        super("0", "Handling customer order details", user);
 
         this.#purchase = null;
     }
@@ -20,13 +20,9 @@ class PurchaseStep extends Step {
 
     setPurchase(purchase) {
         if (this.#purchase) {
-            throw new Error("Purchase already has a value assigned. Cannot set a new value.")
-
+            throw new Error("Purchase already has a value assigned. Cannot set a new value.");
         } else {
-            if (!Array.isArray(purchase)) throw new Error("Invalid purchase type: purchase must be an array")
-            purchase.forEach((product) => {
-                if (!(product instanceof Product)) throw new Error("Invalid purchase: One or more items in purchase are not instances of Product.")
-            })
+            if (!purchase instanceof Purchase) throw new Error("Purchase is not instance of Purchase.");
         }
 
         this.#purchase = purchase;
@@ -35,20 +31,20 @@ class PurchaseStep extends Step {
     execute(message) {
         try {
             this.setPurchase(convertMessageToPurchase(message));
-    
+            console.log()
             const nextStep = new AddressStep(this.getUser(), this.#purchase);
             this.setNextStep(nextStep);
 
             return true;
         } catch(err) {
-            console.log("Failed to create Purchase:\n" + err)
-            this.getUser().newMessage(Messages.orderError());
+            console.log("Failed in PurchaseStep:\n" + err)
+            this.getUser().newMessage(Messages.invalidRequest());
 
             return false;
         }
     }
 
-    getInitialMessage() {
+    initialMessage() {
         this.getUser().newMessage(Messages.orderRequest());
     }
 
