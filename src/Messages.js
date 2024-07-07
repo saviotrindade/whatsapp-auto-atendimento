@@ -16,7 +16,7 @@ class Messages {
     }
     
     static orderSuccess(orderID) {
-        return "Seu pedido foi concluído com sucesso! 🎉\n\nNúmero do pedido: " + orderID + "\n\nObrigado por comprar conosco! Seu pedido está sendo processado e você receberá atualizações sobre o status em breve.\nCaso precise de mais alguma coisa, não hesite em nos contatar. 😊"
+        return "Seu pedido foi concluído com sucesso! 🎉\n\nNúmero do pedido: " + orderID + "\n\nObrigado por comprar conosco! Seu pedido está sendo processado e você receberá atualizações sobre o status em breve. 😊"
     }
 
     static orderDeclined() {

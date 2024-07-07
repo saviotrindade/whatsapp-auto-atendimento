@@ -124,7 +124,7 @@ class Pizza extends Product {
     }
 
     toString() {
-        return `Pizza: ${this.getName()}, ${this.getSize()}, ${this.getQuantity()}uni, ${this.getTotalPrice().toLocaleString('pt-BR', {
+        return `*Pizza:* ${this.getName()}, ${this.getSize()}, ${this.getQuantity()}uni, ${this.getTotalPrice().toLocaleString('pt-BR', {
             currency: 'BRL',
             style: 'currency',
             minimumFractionDigits: 2

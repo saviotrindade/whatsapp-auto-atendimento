@@ -39,22 +39,21 @@ class OrderStep extends Step {
             case "não":
             case "nao":
                 this.getUser().newMessage(Messages.orderDeclined());
-
+                this.setIsStepCompleted(true);
                 break;
         
             default:
                 this.getUser().newMessage(Messages.invalidRequest());
         }
-
-        return false;
     }
 
     initialMessage() {
-        const productsDetails = this.getPurchase().getItems().map((product) => {
-            return product.toString();
-        })
-        const productsString = productsDetails.join("\n");
-        this.getUser().newMessage((`${productsString}\n${this.getPurchase().toString()}\n\nPor favor, confirme se está correto respondendo com "Sim" ou "Não".`));
+
+        // const productsDetails = this.getPurchase().getItems().map((product) => {
+        //     return product.toString();
+        // })
+        // const productsString = productsDetails.join("\n");
+        this.getUser().newMessage((`🛒 *Detalhes do Pedido:*\n ${this.#purchase}\n\n🚨 Por favor, confirme se está correto respondendo com "Sim" ou "Não".`));
     }
 }
 

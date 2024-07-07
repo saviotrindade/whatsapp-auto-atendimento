@@ -29,20 +29,18 @@ async function sessionManager(msg) {
 
     const isStepCompleted = sessions[sessionID].step.getIsStepCompleted();
     
-    if (!shouldExecuteNextStep) {
-        if (isStepCompleted) {
-            closeSession(sessionID);
-            return;
-        }
+    if (isStepCompleted) {
+        closeSession(sessionID);
         return;
     }
+
+    if (!shouldExecuteNextStep) return;
 
     const nextStep = sessions[sessionID].step.getNextStep();
     if (!nextStep) throw new Error("Failed to initiate the next step.");
 
     sessions[sessionID].step = nextStep
 
-    console.log("Chegou até o inital Message!")
     sessions[sessionID].step.initialMessage();
 }
 

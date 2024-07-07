@@ -39,11 +39,16 @@ class Purchase {
     }
 
     toString() {
-        return "Valor total: " + this.getTotalPrice().toLocaleString('pt-BR', {
+        const itemsToString = this.#items.join("\n")
+
+        return `
+        ${itemsToString}
+        
+        Valor total: *${this.getTotalPrice().toLocaleString('pt-BR', {
             currency: 'BRL',
             style: 'currency',
             minimumFractionDigits: 2
-          });
+          })}*`;
     }
 }
 

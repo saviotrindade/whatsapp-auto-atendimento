@@ -37,7 +37,12 @@ class Order {
     }
 
     toString() {
-        return "Aqui estão os detalhes do seu pedido:\n\nID do Produto:" + this.getID() + "\nStatus: " + this.getStatus() + "\n\nAgradecemos sua paciência. Caso precise de mais informações, estamos à disposição!"
+        return `*Novo Pedido Recebido:*
+        🛒 *Detalhes do Pedido:*\n  ${this.#purchase}
+        
+        📦 *Detalhes da Entrega:*
+           - Endereço de Entrega: ${this.#address.getDetails()}
+           - Telefone: ${this.#user.getPhoneNumber()}\n\nPor favor, anote o pedido e confirme o recebimento.`
     }
 }
 
