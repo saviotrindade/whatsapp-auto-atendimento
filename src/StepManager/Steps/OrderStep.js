@@ -49,10 +49,6 @@ class OrderStep extends Step {
 
     initialMessage() {
 
-        // const productsDetails = this.getPurchase().getItems().map((product) => {
-        //     return product.toString();
-        // })
-        // const productsString = productsDetails.join("\n");
         this.getUser().newMessage((`🛒 *Detalhes do Pedido:*\n ${this.#purchase}\n\n🚨 Por favor, confirme se está correto respondendo com "Sim" ou "Não".`));
     }
 }

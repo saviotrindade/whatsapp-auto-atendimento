@@ -1,6 +1,7 @@
-const { Messages } = require('./Messages.js');
-const { StepManager } = require('./StepManager');
-const { User } = require('./entities/User.js');
+const { Messages } = require("./Messages.js");
+const { User } = require("./entities/User.js");
+const { StepManager } = require("./StepManager");
+const { commands } = require("./commands.js");
 
 
 const sessions = {};
@@ -8,7 +9,11 @@ const sessions = {};
 async function sessionManager(msg) {
     const session = await msg.getChat();
     const sessionID = session.id.user;
-
+    
+    if (sessionID === "120363314584252237") {
+        return commands(msg);
+    }
+    
     if (!sessions[sessionID]) { 
         msg.reply(Messages.welcome());
         setNewSession(sessionID);

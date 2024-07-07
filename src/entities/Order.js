@@ -28,6 +28,12 @@ class Order {
         return this.#status;
     }
 
+    setStatus(status) {
+        if (!status instanceof OrderStatus) throw new Error("OrderStatus Type Error: status is not of type OrderStatus.")
+
+        this.#status = status;
+    }
+
     getAddress() {
         return this.#address;
     }
@@ -38,7 +44,7 @@ class Order {
 
     toString() {
         return `*Novo Pedido Recebido:*
-        🛒 *Detalhes do Pedido:*\n  ${this.#purchase}
+        🛒 *Detalhes do Pedido:*   - ${this.#purchase}
         
         📦 *Detalhes da Entrega:*
            - Endereço de Entrega: ${this.#address.getDetails()}
