@@ -9,8 +9,7 @@ function commands(msg) {
         verifyMessage(msg);
         return;
     } catch(e) {
-        msg.reply("Não foi possivel executar este comando");
-        console.log(e);
+        msg.reply(e);
     }
 }
 
@@ -28,16 +27,20 @@ function verifyMessage(msg) {
     const order = searchOrder(orderID);
 
     switch (prefix) {
-        case "confirmed":
+        case "confirmar":
             confirmedCommand(msg, order)
             break;
 
-        case "cancelled":
+        case "cancelar":
             cancelledCommand(msg, reason, order)
             break;
 
-        case "shipped":
+        case "enviar":
             shippedCommand(msg, order);
+            break;
+
+        case "encerrar":
+            completedCommand(msg, order);
             break;
     
         default:
@@ -47,39 +50,44 @@ function verifyMessage(msg) {
 }
 
 function confirmedCommand(msg, order) {
-    const orderStatus = order.getStatus();
-
-    if (orderStatus === OrderStatus.IN_PRODUCTION) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já está em produção.")
-    if (orderStatus === OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já está em rota de entrega.")
-    if (order.getStatus() === OrderStatus.CANCELED) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já foi cancelado.");
+    if (order.getStatus() !== OrderStatus.PENDING) return msg.reply("Não é possivel confirmar este produto novamente.");
 
     order.setStatus(OrderStatus.IN_PRODUCTION);
-    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + order.getStatus() + "\"");
+    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + OrderStatus.IN_PRODUCTION + "\"");
 }
 
 function cancelledCommand(msg, reason, order) {
     const orderStatus = order.getStatus();
 
-    if (orderStatus === OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já está em rota de entrega.")
-    if (order.getStatus() === OrderStatus.CANCELED) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já foi cancelado.");
+    if (orderStatus === OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível cancelar este pedido, pois ele já está em rota de entrega.")
+    if (orderStatus === OrderStatus.CANCELED) return msg.reply("Não foi possível cancelar este pedido, pois ele já foi cancelado.");
 
     if (!reason) return msg.reply("Para cancelar um pedido é necessrio informar o motivo!\n\nExemplo: /cancelled 1001 Local de entrega não encontrado.");
 
     order.setStatus(OrderStatus.CANCELED);
 
-    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + order.getStatus() + "\"");
+    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + OrderStatus.CANCELED + "\"");
     order.getUser().newMessage(Messages.orderCanceled(reason))
 }
 
 function shippedCommand(msg, order) {
     const orderStatus = order.getStatus();
 
-    if (orderStatus === OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já está em rota de entrega.")
-    if (orderStatus === OrderStatus.CANCELED) return msg.reply("Não foi possível alterar o status deste pedido, pois ele já foi cancelado.");
+    if (orderStatus === OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível alterar o status deste pedido para \"enviado\", pois ele já está em rota de entrega.")
+    if (orderStatus === OrderStatus.CANCELED) return msg.reply("Não foi possível alterar o status deste pedido para \"enviado\", pois ele já foi cancelado.");
 
     order.setStatus(OrderStatus.IN_DELIVERY);
-    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + order.getStatus() + "\"");
-    order.getUser().newMessage(Messages.deliveryInProgress);
+    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + OrderStatus.IN_DELIVERY + "\"");
+    order.getUser().newMessage(Messages.deliveryInProgress());
+}
+
+function completedCommand(msg, order) {
+    const orderStatus = order.getStatus();
+
+    if (orderStatus !== OrderStatus.IN_DELIVERY) return msg.reply("Não foi possível completar este pedido, pois ele ainda não foi enviado.");
+
+    order.setStatus(OrderStatus.COMPLETED);
+    msg.reply("Status do pedido Nº " + order.getID() + " alterado com sucesso para " + "\"" + OrderStatus.COMPLETED + "\"");
 }
 
 function searchOrder(orderID) {
@@ -87,7 +95,7 @@ function searchOrder(orderID) {
         if (item.getID() === orderID) return item;
     })
 
-    if (!order) throw new Error("No orders were found matching the provided criteria.");
+    if (!order) throw new Error("Não foi encontrado nenhum pedido com este ID.");
 
     return order;
 }

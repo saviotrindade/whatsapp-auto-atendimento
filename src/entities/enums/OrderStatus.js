@@ -1,7 +1,7 @@
 class OrderStatus {
     static PENDING = 'pendente';
-    static IN_PRODUCTION = 'em produção';
-    static IN_DELIVERY = 'em rota de entrega';
+    static IN_PRODUCTION = 'produção';
+    static IN_DELIVERY = 'enviado';
     static COMPLETED = 'concluído';
     static CANCELED = 'cancelado';
 }

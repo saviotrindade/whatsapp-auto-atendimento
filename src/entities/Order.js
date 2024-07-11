@@ -44,7 +44,7 @@ class Order {
 
     toString() {
         return `*Novo Pedido Recebido:*
-        🛒 *Detalhes do Pedido:*   - ${this.#purchase}
+        🛒 *Detalhes do Pedido: (${this.#id})*${this.#purchase}
         
         📦 *Detalhes da Entrega:*
            - Endereço de Entrega: ${this.#address.getDetails()}

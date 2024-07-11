@@ -9,16 +9,23 @@ const sessions = {};
 async function sessionManager(msg) {
     const session = await msg.getChat();
     const sessionID = session.id.user;
-    
+
+    if ( msg.body === "cancelar") {
+        closeSession(sessionID);
+    }
+
     if (sessionID === "120363314584252237") {
         return commands(msg);
     }
+
+    // "IT's ME?"
+    if (sessionID !== "557781592441") return;
     
     if (!sessions[sessionID]) { 
         msg.reply(Messages.welcome());
         setNewSession(sessionID);
         sessions[sessionID].timeout = selfDestruct(sessionID);
-        return
+        return;
     }
 
     if (!sessions[sessionID].step) {
@@ -26,7 +33,7 @@ async function sessionManager(msg) {
 
         sessions[sessionID].step = StepManager(msg.body, user);
         sessions[sessionID].timeout = selfDestruct(sessionID);
-        return
+        return;
     }
 
     const shouldExecuteNextStep = sessions[sessionID].step.execute(msg.body);
@@ -63,7 +70,7 @@ function closeSession(sessionID) {
 function selfDestruct(sessionID, timeout = 900000) {
     setTimeout(() => {
         delete sessions[sessionID];
-    }, timeout)
+    }, timeout);
 }
 
-module.exports = { sessionManager }
+module.exports = { sessionManager };
