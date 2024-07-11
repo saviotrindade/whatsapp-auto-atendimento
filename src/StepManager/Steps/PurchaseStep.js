@@ -31,7 +31,7 @@ class PurchaseStep extends Step {
     execute(message) {
         try {
             this.setPurchase(convertMessageToPurchase(message));
-            console.log()
+
             const nextStep = new AddressStep(this.getUser(), this.#purchase);
             this.setNextStep(nextStep);
 

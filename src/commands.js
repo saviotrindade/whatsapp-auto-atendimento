@@ -1,7 +1,6 @@
 const { orders } = require("./makeOrder.js");
 const { Messages } = require("./Messages.js");
 const { OrderStatus } = require("./entities/enums/OrderStatus.js");
-const { channels } = require("./Channels.js");
 
 
 function commands(msg) {
@@ -50,6 +49,7 @@ function verifyMessage(msg) {
 }
 
 function confirmedCommand(msg, order) {
+    if (order.getStatus() === OrderStatus.CANCELED) return msg.reply("Não é possivel confirmar este produto, pois ele já está cancelado.");
     if (order.getStatus() !== OrderStatus.PENDING) return msg.reply("Não é possivel confirmar este produto novamente.");
 
     order.setStatus(OrderStatus.IN_PRODUCTION);

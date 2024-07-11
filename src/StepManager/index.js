@@ -1,6 +1,7 @@
 const { Messages } = require("../Messages.js");
 const { PurchaseStep } = require("./Steps/PurchaseStep.js");
 const { OrderStatusStep } = require("./Steps/OrderStatusStep.js");
+const { CancelOrderStep } = require("./Steps/CancelOrderStep.js");
 
 
 function StepManager(message, user) {
@@ -17,10 +18,11 @@ function StepManager(message, user) {
             return step;
         }
         
-        case "2":
-            return `
-            Qual o numero do seu pedido?
-            `;
+        case "2": {
+            const step = new CancelOrderStep(user);
+            step.initialMessage();
+            return step;
+        }
         
         case "3": 
             return `
