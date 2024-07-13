@@ -2,6 +2,7 @@ const { Messages } = require("../Messages.js");
 const { PurchaseStep } = require("./Steps/PurchaseStep.js");
 const { OrderStatusStep } = require("./Steps/OrderStatusStep.js");
 const { CancelOrderStep } = require("./Steps/CancelOrderStep.js");
+const { SupportChannelStep } = require("./Steps/SupportChannelStep.js");
 
 
 function StepManager(message, user) {
@@ -25,9 +26,9 @@ function StepManager(message, user) {
         }
         
         case "3": 
-            return `
-            Estou lhe encaminhando para um de nossos atendentes, aguarde...
-            `;
+            const step = new SupportChannelStep(user);
+            step.initialMessage();
+            return step;
 
         default:
             user.newMessage(Messages.notFound());

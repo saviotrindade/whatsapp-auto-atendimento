@@ -2,16 +2,16 @@ const { Messages } = require("./Messages.js");
 const { User } = require("./entities/User.js");
 const { StepManager } = require("./StepManager");
 const { commands } = require("./commands.js");
+const { sessions } = require("./Sessions.js");
 
-
-const sessions = {};
 
 async function sessionManager(msg) {
-    const session = await msg.getChat();
-    const sessionID = session.id.user;
+    const channel = await msg.getChat();
+    const sessionID = channel.id.user;
 
     if ( msg.body === "cancelar") {
-        closeSession(sessionID);
+        // closeSession(sessionID);
+        sessions.closeSession(sessionID);
     }
 
     if (sessionID === "120363314584252237") {
@@ -21,56 +21,44 @@ async function sessionManager(msg) {
     // "IT's ME?"
     if (sessionID !== "557781592441") return;
     
-    if (!sessions[sessionID]) { 
+    if (!sessions.getSessionByID(sessionID)) { 
         msg.reply(Messages.welcome());
-        setNewSession(sessionID);
-        sessions[sessionID].timeout = selfDestruct(sessionID);
+        sessions.setSession(sessionID);
+        sessions.setSessionTimeout(sessionID);
         return;
     }
 
-    if (!sessions[sessionID].step) {
-        const user = new User(sessionID, session);
+    if (!sessions.getSessionByID(sessionID).step) {
+        const user = new User(sessionID, channel);
 
-        sessions[sessionID].step = StepManager(msg.body, user);
-        sessions[sessionID].timeout = selfDestruct(sessionID);
+        const firstStep = StepManager(msg.body, user);
+        sessions.setSessionStep(sessionID, firstStep);
+        sessions.setSessionTimeout(sessionID);
         return;
     }
 
-    const shouldExecuteNextStep = sessions[sessionID].step.execute(msg.body);
-    sessions[sessionID].timeout = selfDestruct(sessionID);
+    const shouldExecuteNextStep = sessions.getSessionStep(sessionID).execute(msg.body);
+    sessions.setSessionTimeout(sessionID);
 
-    const isStepCompleted = sessions[sessionID].step.getIsStepCompleted();
+    const isStepCompleted = sessions.getSessionStep(sessionID).getIsStepCompleted();
     
     if (isStepCompleted) {
-        closeSession(sessionID);
+        try {
+            sessions.closeSession(sessionID);
+        } catch (e) {
+            console.log(e);
+        }
         return;
     }
 
     if (!shouldExecuteNextStep) return;
 
-    const nextStep = sessions[sessionID].step.getNextStep();
+    const nextStep = sessions.getSessionStep(sessionID).getNextStep();
     if (!nextStep) throw new Error("Failed to initiate the next step.");
 
-    sessions[sessionID].step = nextStep
+    sessions.setSessionStep(sessionID, nextStep);
 
-    sessions[sessionID].step.initialMessage();
-}
-
-function setNewSession(sessionID) {
-    sessions[sessionID] = {
-        step: null,
-        timeout: null
-    };
-}
-
-function closeSession(sessionID) {
-    delete sessions[sessionID];
-}
-
-function selfDestruct(sessionID, timeout = 900000) {
-    setTimeout(() => {
-        delete sessions[sessionID];
-    }, timeout);
+    sessions.getSessionStep(sessionID).initialMessage();
 }
 
 module.exports = { sessionManager };
